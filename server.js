@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const app = express();
-const users = [];
+
 app.use(express.json());
 
 //rota de criação de usuario
@@ -20,8 +20,9 @@ app.post("/users", async (req, res) => {
 });
 
 //rotas de listagem de usuarios
-app.get("/users", (req, res) => {
-  res.status(200).json(req.body);
+app.get("/users", async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.status(200).json(users);
 });
 app.listen(3000);
 
