@@ -21,9 +21,21 @@ app.post("/users", async (req, res) => {
 
 //rotas de listagem de usuarios
 app.get("/users", async (req, res) => {
-  const users = await prisma.user.findMany();
+  let users = [];
+  if (req.query) {
+    users = await prisma.user.findMany({
+      where: {
+        name: req.query.name,
+        age: req.query.age,
+        email: req.query.email,
+      },
+    });
+  } else {
+    users = await prisma.user.findMany();
+  }
   res.status(200).json(users);
 });
+
 //rota de atualização de usuario
 app.put("/users/:id", async (req, res) => {
   await prisma.user.update({
@@ -45,7 +57,7 @@ app.delete("/users/:id", async (req, res) => {
       id: req.params.id,
     },
   });
-  res.status(200).json({ message: "Usuário Deletado!" });
+  res.status(200).json(req.body);
 });
 app.listen(3000);
 
