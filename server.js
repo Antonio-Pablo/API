@@ -24,7 +24,7 @@ app.get("/users", async (req, res) => {
   const users = await prisma.user.findMany();
   res.status(200).json(users);
 });
-
+//rota de atualização de usuario
 app.put("/users/:id", async (req, res) => {
   await prisma.user.update({
     where: {
@@ -38,7 +38,15 @@ app.put("/users/:id", async (req, res) => {
   });
   res.status(201).json(req.body);
 });
-
+//rota de deletar usuario
+app.delete("/users/:id", async (req, res) => {
+  await prisma.user.delete({
+    where: {
+      id: req.params.id,
+    },
+  });
+  res.status(200).json({ message: "Usuário Deletado!" });
+});
 app.listen(3000);
 
 /*
